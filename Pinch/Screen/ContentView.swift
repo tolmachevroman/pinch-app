@@ -40,7 +40,7 @@ struct ContentView: View {
                     .offset(x: imageOffset.width, y: imageOffset.height)
                     .animation(.linear(duration: 1), value: isAnimating)
                     .scaleEffect(imageScale)
-                    // MARK: - TAP GESTURE
+                // MARK: - TAP GESTURE
                     .onTapGesture(count: 2) {
                         if (imageScale == 1) {
                             withAnimation(.spring) {
@@ -50,7 +50,7 @@ struct ContentView: View {
                             resetImageState()
                         }
                     }
-                    // MARK: - DRAG GESTURE
+                // MARK: - DRAG GESTURE
                     .gesture(
                         DragGesture()
                             .onChanged { value in
@@ -63,6 +63,26 @@ struct ContentView: View {
                                     resetImageState()
                                 }
                                 
+                            }
+                    )
+                // MARK: - MAGNIFICATION GESTURE
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                withAnimation(.linear(duration: 1)) {
+                                    if imageScale >= 1 && imageScale <= 5 {
+                                        imageScale = value
+                                    } else if imageScale > 5 {
+                                        imageScale = 5
+                                    }
+                                }
+                            }
+                            .onEnded { _ in
+                                if imageScale > 5 {
+                                   imageScale = 5
+                                } else if imageScale <= 1 {
+                                    resetImageState()
+                                }
                             }
                     )
                 
